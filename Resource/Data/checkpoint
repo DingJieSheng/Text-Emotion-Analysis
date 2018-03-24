@@ -1,0 +1,2 @@
+model_checkpoint_path: "CNN-LSTM_Model"
+all_model_checkpoint_paths: "CNN-LSTM_Model"
