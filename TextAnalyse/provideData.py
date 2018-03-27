@@ -1,33 +1,38 @@
 #encoding=utf-8
 from gensim.models import word2vec
 import numpy as np
-import  tensorflow as tf
+from sklearn.model_selection import train_test_split as tts
 
-def getTrainData(n,batchSize,seq_lenth=200,emb_lenth=200):
+def getTrainData(n,sampleSize,seq_lenth=200,emb_lenth=100):
     fread1=open("../Resource/Data/fenci.txt",'r',encoding='utf-8')
     fread2 = open("../Resource/Data/labels.txt", 'r', encoding='utf-8')
     lines=fread1.readlines()
     #——————————————————————————————————后期改进——————————————————————————————————————————————
-    text=lines[n*batchSize+5900:5900+(n+1)*batchSize]
-    labels=np.array(fread2.readlines()[n*batchSize+5900:5900+(n+1)*batchSize])
-    return getWordEmbedding(text,batchSize,seq_lenth,emb_lenth),labels
+    text=lines[1000:11000]
+    # text=lines[n*batchSize:(n+1)*batchSize]
+    labels=np.array(fread2.readlines()[1000:11000])
+    # labels=np.array(fread2.readlines()[n*batchSize:(n+1)*batchSize])
+    text,text_test,labels,labels_test = tts(text,labels,test_size=1-sampleSize/10000)
+    labels = labels.reshape((sampleSize,1))
+    return getWordEmbedding(text,sampleSize,seq_lenth,emb_lenth),labels
 
-def getTestData(seq_lenth=200,emb_lenth=200):
+def getTestData(n,batchSize,seq_lenth=200,emb_lenth=100):
     fread1 = open("../Resource/Data/fenci.txt", 'r', encoding='utf-8')
     fread2 = open("../Resource/Data/labels.txt", 'r', encoding='utf-8')
     lines = fread1.readlines()
-    text = lines[12000:16000]
-    labels = fread2.readlines()[12000:16000]
-    return getWordEmbedding(text, 4000, seq_lenth, emb_lenth), labels
+    text = lines[13800+n*batchSize:13800+(n+1)*batchSize]
+    labels =np.array(fread2.readlines()[13800+n*batchSize:13800+(n+1)*batchSize])
+    labels = labels.reshape((batchSize,1))
+    return getWordEmbedding(text, batchSize, seq_lenth, emb_lenth), labels
 
 
 def wordEmbedding():
     sentences = word2vec.Text8Corpus("../Resource/Data/fenci.txt",)
-    model = word2vec.Word2Vec(sentences,size=200, min_count=1)
+    model = word2vec.Word2Vec(sentences,size=100, min_count=5)
     model.save("../Resource/Data/wordembedding.bin")
     model.init_sims(replace=True)
 
-def getWordEmbedding(text,batchSize,sep_lenth=200,emb_size=200):
+def getWordEmbedding(text,batchSize,sep_lenth=200,emb_size=100):
     words_embedding=[]
     model = word2vec.Word2Vec.load("../Resource/Data/wordembedding.bin")
     for line in text:
@@ -45,7 +50,9 @@ def getWordEmbedding(text,batchSize,sep_lenth=200,emb_size=200):
     words_embedding = words_embedding.reshape((batchSize,sep_lenth,emb_size,1))
     return words_embedding
 
+
+
 if __name__ == '__main__':
-    pass
+    # getTrainData(0,16000,200,100)
     # wordEmbedding()
-    # print(getTrainData(0,2)[0])
+    getTrainData(0,400,200,100)
