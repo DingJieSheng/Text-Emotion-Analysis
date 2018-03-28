@@ -1,0 +1,5 @@
+# Text-Emotion-Analysis
+基于神经网络的中文文本情感分析算法
+注：由于Github项目大小限制在100MB，而我的词向量文件大小超过了100MB所以就没有传至此仓库，要正常运行此项目还需使用word2vec工具对fenci.txt中的词语进行词向量
+训练，生成词向量文件wordembdding.bin文件
+此算法是利用CNN链接LSTM来进行文本的情感分类
