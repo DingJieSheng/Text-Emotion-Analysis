@@ -76,5 +76,5 @@ def testModel(sampleSize,sequence_length, num_classes, embedding_size, filter_si
 
 
 if __name__ == '__main__':
-    testModel(sampleSize=2000,sequence_length=100,num_classes=2,embedding_size=100,filter_sizes=10,num_filters=10,batchSize=1,keep_prob=1)
+    testModel(sampleSize=4000,sequence_length=100,num_classes=2,embedding_size=100,filter_sizes=10,num_filters=10,batchSize=1,keep_prob=1)
 

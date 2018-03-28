@@ -8,11 +8,11 @@ def getTrainData(n,sampleSize,seq_lenth=200,emb_lenth=100):
     fread2 = open("../Resource/Data/labels.txt", 'r', encoding='utf-8')
     lines=fread1.readlines()
     #——————————————————————————————————后期改进——————————————————————————————————————————————
-    text=lines[1000:11000]
+    text=lines[0:12000]
     # text=lines[n*batchSize:(n+1)*batchSize]
-    labels=np.array(fread2.readlines()[1000:11000])
+    labels=np.array(fread2.readlines()[0:12000])
     # labels=np.array(fread2.readlines()[n*batchSize:(n+1)*batchSize])
-    text,text_test,labels,labels_test = tts(text,labels,test_size=1-sampleSize/10000)
+    text,text_test,labels,labels_test = tts(text,labels,test_size=1-sampleSize/12000)
     labels = labels.reshape((sampleSize,1))
     return getWordEmbedding(text,sampleSize,seq_lenth,emb_lenth),labels
 
@@ -20,8 +20,8 @@ def getTestData(n,batchSize,seq_lenth=200,emb_lenth=100):
     fread1 = open("../Resource/Data/fenci.txt", 'r', encoding='utf-8')
     fread2 = open("../Resource/Data/labels.txt", 'r', encoding='utf-8')
     lines = fread1.readlines()
-    text = lines[13800+n*batchSize:13800+(n+1)*batchSize]
-    labels =np.array(fread2.readlines()[13800+n*batchSize:13800+(n+1)*batchSize])
+    text = lines[12000+n*batchSize:12000+(n+1)*batchSize]
+    labels =np.array(fread2.readlines()[12000+n*batchSize:12000+(n+1)*batchSize])
     labels = labels.reshape((batchSize,1))
     return getWordEmbedding(text, batchSize, seq_lenth, emb_lenth), labels
 

@@ -11,7 +11,7 @@ def createNetwork(sampleSize,sequence_length, num_classes, embedding_size, filte
         # tf.summary.histogram('input/labels',y)
         dropout_keep_prob=tf.placeholder(dtype=tf.float32,name='keep_prob')
         # tf.summary.histogram('input/keep_prob',dropout_keep_prob)
-        modelpath='../Resource/Data/CNN-LSTM_Model.ckpt'
+        modelpath='../Resource/Data/CNN-LSTM-Models/CNN-LSTM_Model-3.ckpt'
         # pointNum = tf.constant(point,tf.float32,[1],'ponit-num')
     #定义卷积层，由于需要保持语句的时序信息，故此处不需要池化层
     with tf.name_scope('conv'):
@@ -89,12 +89,12 @@ def createNetwork(sampleSize,sequence_length, num_classes, embedding_size, filte
             accurancy = tf.reduce_sum(tf.cast(tf.equal(y, tf.round(predictions)), tf.float32))
             acc_num = 0
             # x_test,y_test= pd.getTestData(seq_lenth=sequence_length,emb_lenth=embedding_size)
-            for i in range(int(1000/batchSize)):
+            for i in range(int(4000/batchSize)):
                 x_test,y_test= pd.getTestData(n=i,batchSize=batchSize,seq_lenth=sequence_length,emb_lenth=embedding_size)
                 # x_test,y_test= pd.getTrainData(n=i,batchSize=batchSize,seq_lenth=sequence_length,emb_lenth=embedding_size)
                 acc,result = sess.run([accurancy,predictions], feed_dict={x: x_test, y: y_test,dropout_keep_prob:1})
                 acc_num += acc
-            print(acc_num/400)
+            print(acc_num/4000)
 
 if __name__ == '__main__':
-    createNetwork(sampleSize=8000,sequence_length=100,num_classes=2,embedding_size=100,filter_sizes=10,num_filters=10,l2_reg_lambda=0.1,epoch=50,learning_rate=0.001,batchSize=100,keep_prob=0.5)
+    createNetwork(sampleSize=12000,sequence_length=100,num_classes=2,embedding_size=100,filter_sizes=10,num_filters=10,l2_reg_lambda=1,epoch=100,learning_rate=0.001,batchSize=100,keep_prob=0.5)
